@@ -1,0 +1,157 @@
+<head>
+  <title>Astronomy</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body></body>
+
+<template name="Layout">
+  <div class="container">
+    {{> Template.dynamic template=main}}
+  </div>
+</template>
+
+<template name="Users">
+  <h4>List of users</h4>
+
+  <table class="striped responsive-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>E-mail</th>
+        <th>Age</th>
+        <th>Address</th>
+        <th>Phones</th>
+        <th>Created at</th>
+        <th>Updated at</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each users}}
+        {{> User}}
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a data-action="addUser" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+  </div>
+</template>
+
+<template name="User">
+  <tr>
+    <td><a href="{{pathFor 'edit'}}">{{fullName}}</a></td>
+    <td><a href="mailto:{{email}}">{{email}}</a></td>
+    <td>{{age}}</td>
+    <td>{{address.where}}</td>
+    <td>{{#each phones}}<div>{{name}} {{number}}</div>{{/each}}</td>
+    <td>{{createdAt.toLocaleString}}</td>
+    <td>{{updatedAt.toLocaleString}}</td>
+    <td><a data-action="removeUser" class="btn-flat"><i class="material-icons">delete</i></a></td>
+  </tr>
+</template>
+
+<template name="UserForm">
+  {{#with user.get}}
+    {{#if _id}}
+      <h4>Editing "{{fullName}}"</h4>
+    {{else}}
+      <h4>Adding a new user</h4>
+    {{/if}}
+
+    <div class="row">
+      <form class="col s12">
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="firstName" type="text" value="{{firstName}}" class="validate {{#if hasError 'firstName'}}invalid{{/if}}">
+            <label for="firstName">First Name</label>
+            {{#if hasError 'firstName'}}
+              <div class="error">{{getError 'firstName'}}</div>
+            {{/if}}
+          </div>
+          <div class="input-field col s6">
+            <input id="lastName" type="text" value="{{lastName}}" class="validate {{#if hasError 'lastName'}}invalid{{/if}}">
+            <label for="lastName">Last Name</label>
+            {{#if hasError 'lastName'}}
+              <div class="error">{{getError 'lastName'}}</div>
+            {{/if}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="email" type="email" value="{{email}}" class="validate{{#if hasError 'email'}}invalid{{/if}}">
+            <label for="email">E-mail</label>
+            {{#if hasError 'email'}}
+              <div class="error">{{getError 'email'}}</div>
+            {{/if}}
+          </div>
+          <div class="input-field col s6">
+            <input id="birthDate" type="date" value="{{formattedBirthDate}}" class="validate {{#if hasError 'birthDate'}}invalid{{/if}}">
+            {{#if hasError 'birthDate'}}
+              <div class="error">{{getError 'birthDate'}}</div>
+            {{/if}}
+          </div>
+        </div>
+        <div class="section">
+          <h5>Address</h5>
+          {{> AddressForm address}}
+        </div>
+        <div class="section">
+          <h5>Phones</h5>
+          {{#each phones}}
+            {{> PhoneForm}}
+          {{/each}}
+          <a data-action="addPhone" class="waves-effect waves-light btn">Add phone</a>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  {{/with}}
+</template>
+
+<template name="AddressForm">
+  <div class="row">
+    <div class="input-field col s6">
+      <input id="city" type="text" value="{{city}}" class="validate {{#if hasError 'city'}}invalid{{/if}}">
+      <label for="city">City</label>
+      {{#if hasError 'city'}}
+        <div class="error">{{getError 'city'}}</div>
+      {{/if}}
+    </div>
+    <div class="input-field col s6">
+      <input id="state" type="text" value="{{state}}" class="validate {{#if hasError 'state'}}invalid{{/if}}">
+      <label for="state">State</label>
+      {{#if hasError 'state'}}
+        <div class="error">{{getError 'state'}}</div>
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="PhoneForm">
+  <div class="row">
+    <div class="input-field col s4">
+      <input id="name" type="text" value="{{name}}" class="validate {{#if hasError 'name'}}invalid{{/if}}">
+      <label for="name">Name</label>
+      {{#if hasError 'name'}}
+        <div class="error">{{getError 'name'}}</div>
+      {{/if}}
+    </div>
+    <div class="input-field col s7">
+      <input id="number" type="text" value="{{number}}" class="validate {{#if hasError 'number'}}invalid{{/if}}">
+      <label for="number">Number</label>
+      {{#if hasError 'number'}}
+        <div class="error">{{getError 'number'}}</div>
+      {{/if}}
+    </div>
+    <div class="col s1">
+      <a data-action="removePhone" class="btn-flat"><i class="material-icons">delete</i></a>
+    </div>
+  </div>
+</template>
